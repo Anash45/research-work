@@ -229,25 +229,45 @@ function endTimer()
 {
     require_once 'db_conn.php'; // Include your database connection script
     $user_id = $_SESSION['user_id'];
-
     // Get the current date/time in UTC timezone
     $currentDateTimeUTC = new DateTime('now', new DateTimeZone('UTC'));
     $end_time = $currentDateTimeUTC->format('Y-m-d H:i:s');
 
-    // Prepare and execute the SQL query to update the timer record
-    $query = "UPDATE timer SET end_time = ? WHERE user_id = ? AND end_time IS NULL";
+    // Get all timers started by the user whose end_time is null
+    $query = "SELECT start_time, duration_minutes,id FROM timer WHERE user_id = ? AND end_time IS NULL";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("si", $end_time, $user_id);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    // Execute the statement
-    if ($stmt->execute()) {
-        // Timer updated successfully
-        return true;
-    } else {
-        // Error occurred while updating timer
-        return false;
+    // Loop through each timer
+    while ($row = $result->fetch_assoc()) {
+        // Calculate the expected end time based on the duration of the timer
+        $start_time = $row['start_time'];
+        $duration = $row['duration_minutes'];
+        $expected_end_time = date('Y-m-d H:i:s', strtotime($start_time . ' +' . $duration . ' minutes')); // Add duration to start time
+
+        // If the current end time is greater than the expected end time, update it to the expected end time
+        if ($end_time > $expected_end_time) {
+            $end_time = $expected_end_time;
+        }
+
+        // Calculate the exact duration based on the start and end times
+        $start_datetime = new DateTime($start_time);
+        $end_datetime = new DateTime($end_time);
+        $exact_duration = $start_datetime->diff($end_datetime)->format('%i'); // Duration in minutes
+
+        // Prepare and execute the SQL query to update the timer record
+        $update_query = "UPDATE timer SET end_time = ?, duration_minutes = ? WHERE id = ?";
+        $update_stmt = $conn->prepare($update_query);
+        $update_stmt->bind_param("sii", $end_time, $exact_duration, $row['id']);
+        $update_stmt->execute();
     }
+
+    return true; // All timers updated successfully
 }
+
+
 
 function getUserTimer()
 {
@@ -439,4 +459,129 @@ function toggleEventAttendance($event_id)
 
     // Return the response array
     return $response;
+}
+
+function getEventAttendees($event_id)
+{
+    global $conn;
+
+    // Prepare and execute query to fetch the attendees' details for the event
+    $query = "SELECT attendees.attendee_id, users.name, users.email 
+              FROM attendees 
+              INNER JOIN users ON attendees.user_id = users.user_id
+              WHERE attendees.event_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $event_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Initialize an empty array to store the attendees' details
+    $attendees = array();
+
+    // Loop through the result set and store each attendee's details in the array
+    while ($row = $result->fetch_assoc()) {
+        $attendees[] = $row;
+    }
+
+    // Return the array of attendees' details
+    return $attendees;
+}
+
+function getTimerMinutesPerDay($user_id)
+{
+    global $conn;
+
+    // Prepare and execute query to get sum of minutes per day
+    $query = "SELECT DATE(start_time) AS day, SUM(duration_minutes) AS total_minutes, COUNT(*) AS timer_count FROM timer WHERE user_id = ? GROUP BY DATE(start_time) ORDER BY DATE(start_time)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Initialize an empty array to store the results
+    $data = array();
+
+    // Loop through the result set and store the data
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+
+    return $data;
+}
+
+
+// Function to fetch the last 5 users added to the website
+function getLastFiveUsers()
+{
+    global $conn;
+
+    // Query to fetch the last 5 users added to the website
+    $query = "SELECT * FROM users ORDER BY created_at DESC LIMIT 5";
+    $result = $conn->query($query);
+
+    // Initialize an array to store user data
+    $users = array();
+
+    // Fetch user data
+    while ($row = $result->fetch_assoc()) {
+        $users[] = $row;
+    }
+
+    return $users;
+}
+// Function to fetch the last 5 events added
+function getLastFiveEvents()
+{
+    global $conn;
+
+    // Query to fetch the last 5 events added to the website
+    $query = "SELECT * FROM events ORDER BY event_id DESC LIMIT 5";
+    $result = $conn->query($query);
+
+    // Initialize an array to store event data
+    $events = array();
+
+    // Fetch event data
+    while ($row = $result->fetch_assoc()) {
+        $events[] = $row;
+    }
+
+    return $events;
+}
+
+// Function to get all users except those with the role as admin
+function getUsersExceptAdmin()
+{
+    global $conn;
+
+    // Query to fetch all users except those with the role as admin
+    $query = "SELECT * FROM users WHERE role != 'admin'";
+    $result = $conn->query($query);
+
+    // Initialize an array to store user data
+    $users = array();
+
+    // Fetch user data
+    while ($row = $result->fetch_assoc()) {
+        $users[] = $row;
+    }
+
+    return $users;
+}
+function deleteUser($user_id)
+{
+    global $conn;
+
+    // Prepare and execute the SQL query to delete the user
+    $query = "DELETE FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+
+    if ($stmt->execute()) {
+        // User deleted successfully
+        return true;
+    } else {
+        // Error occurred while deleting user
+        return false;
+    }
 }

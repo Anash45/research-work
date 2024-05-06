@@ -37,14 +37,14 @@ if (isset($_POST['add_board'])) {
         $stmt = $conn->prepare($insert_query);
         $stmt->bind_param("isi", $user_id, $board_name, $new_order);
         if ($stmt->execute()) {
-            $info = '<div class="alert alert-danger">"Board added successfully!</div>';
+            $info = '<div class="alert alert-success">Project added successfully!</div>';
         } else {
-            $info = '<div class="alert alert-danger">"Error: ' . $conn->error . '</div>';
+            $info = '<div class="alert alert-danger">Error: ' . $conn->error . '</div>';
         }
     }
 }
 if (isset($_GET['delete'])) {
-    $info = '<div class="alert alert-success">Board deleted successfully.</div>';
+    $info = '<div class="alert alert-success">Project deleted successfully.</div>';
 }
 $page = 'projects';
 ?>
@@ -57,7 +57,7 @@ $page = 'projects';
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
-        <title>Research Work</title>
+        <title>TeamForceConnect</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="./assets/fontawesome/css/all.css">

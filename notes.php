@@ -41,7 +41,7 @@ $page = 'notes';
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
-        <title>Research Work</title>
+        <title>TeamForceConnect</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="./assets/fontawesome/css/all.css">

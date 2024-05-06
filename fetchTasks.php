@@ -21,7 +21,8 @@ if (isset($_SESSION['user_id'])) {
                 'id' => $row['task_id'],
                 'board_id' => $row['board_id'],
                 'title' => $row['task_title'],
-                'start' => $row['deadline_date'] // Assuming deadline_date is the start date for the task
+                'start' => $row['deadline_date'],
+                'eventType' => 'task'// Assuming deadline_date is the start date for the task
                 // You can add more properties like 'end' if you have end dates for tasks
             );
             // Add the event to the events array

@@ -29,7 +29,7 @@ $page = 'messages';
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
-        <title>Research Work</title>
+        <title>TeamForceConnect</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="./assets/fontawesome/css/all.css">
@@ -46,12 +46,14 @@ $page = 'messages';
                         <div class="messages py-3" id="messages">
                             <?php
                             $messages = getAllMessages();
+                            $newMsg = false;
                             if (!empty($messages)) {
                                 foreach ($messages as $message) {
                                     $user = getUserById($message['user_id']);
                                     $lastUnreadMessage = getLastUnread();
-                                    if ($lastUnreadMessage != null && ($lastUnreadMessage + 1) == $message['message_id']) {
+                                    if ($lastUnreadMessage != null && ($lastUnreadMessage + 1) == $message['message_id'] && $newMsg == false) {
                                         echo '<p class="new-messages text-center" id="new-messages"><span>New Messages</span></p>';
+                                        $newMsg = true;
                                     }
                                     readMessage($message['message_id']);
                                     ?>

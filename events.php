@@ -6,7 +6,7 @@ if (!isLoggedIn()) {
     header('location: login.php');
 }
 $info = '';
-if (isset($_POST['add_event'])) {
+if (isset($_POST['add_event']) && isAdmin()) {
 
     $title = $_POST['event_title'];
     $description = $_POST['event_description'];
@@ -18,7 +18,7 @@ if (isset($_POST['add_event'])) {
     } else {
         $info = '<div class="alert mb-0 py-2 px-3 alert-success">' . $checkEvent['message'] . '</div>';
     }
-} elseif (isset($_GET['delete_event'])) { // Check if update_event form is submitted
+} elseif (isset($_GET['delete_event']) && isAdmin()) { // Check if update_event form is submitted
     // Retrieve form data
     $user_id = $_SESSION['user_id']; // Assuming user ID is stored in session
     $event_id = $_GET['delete_event'];
@@ -55,7 +55,7 @@ $page = 'events';
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
-        <title>Research Work</title>
+        <title>TeamForceConnect</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="./assets/fontawesome/css/all.css">
@@ -70,7 +70,13 @@ $page = 'events';
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <h1 class="section-title pt-3 fw-bold text-center text-white">Events</h1>
-                        <button class="btn" data-bs-toggle="modal" data-bs-target="#addEventModal">Add Event</button>
+                        <?php
+                        if (isAdmin()) {
+                            ?>
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#addEventModal">Add Event</button>
+                            <?php
+                        }
+                        ?>
                     </div>
                     <?php echo $info; ?>
                     <div class="row py-5">

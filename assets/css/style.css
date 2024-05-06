@@ -1,5 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
+/* For WebKit browsers (e.g., Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 4px !important;
+  border-radius: 10px !important;
+  background: #635FC7 !important;
+  /* Set the width of the scrollbar */
+}
+
+/* For WebKit browsers (e.g., Chrome, Safari) */
+::-webkit-scrollbar-thumb {
+  background: #635FC7 !important;
+  /* Set the color of the scrollbar thumb */
+}
+
+/* For Firefox */
+/* Note: Firefox does not support styling scrollbar directly with CSS.
+ However, you can use -moz-scrollbar to target it. */
+* {
+  scrollbar-width: thin !important;
+  /* Set the width of the scrollbar */
+}
+
+*::-moz-scrollbar-thumb {
+  background: #635FC7 !important;
+  /* Set the color of the scrollbar thumb */
+}
+
 :root {
   --light-dark: #2b2c37;
   --dark: #20212C;
@@ -229,7 +256,8 @@ main {
   min-height: 300px;
 }
 
-.task,.note {
+.task,
+.note {
   background-color: var(--light-dark);
   padding: 10px;
   border-radius: 8px;
@@ -238,11 +266,14 @@ main {
   margin-bottom: 10px;
 }
 
-.task:hover,.note:hover .task-title,.note-title {
+.task:hover,
+.note:hover .task-title,
+.note-title {
   color: #2470dc;
 }
 
-.task-title,.note-title {
+.task-title,
+.note-title {
   font-size: 20px;
   font-weight: 700;
   transition: 0.3s ease-in-out;
@@ -440,6 +471,7 @@ main {
 .started #stopState {
   display: flex;
 }
+
 .started #startState {
   display: none;
 }
@@ -448,16 +480,34 @@ main {
   font-weight: 600;
 }
 
-.started .timer-button{
+.started .timer-button {
   background-color: #00ce00;
 }
 
-.started .timer-ending{
+.started .timer-ending {
   background-color: #b80000;
 }
-.note-description a{
+
+.note-description a {
   font-size: 12px;
 }
-.event_date_time{
+
+.event_date_time {
   font-size: 12px;
+}
+
+.fc-daygrid-dot-event {
+  color: #FFF;
+  background-color: #4ec700;
+  border-color: #4ec700;
+}
+
+.event-event,
+.task-event {
+  padding-left: 4px;
+}
+
+.event-event span,
+.task-event span {
+  font-weight: 700;
 }

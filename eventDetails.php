@@ -33,7 +33,7 @@ $page = 'events';
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.84.0">
-        <title>Research Work</title>
+        <title>TeamForceConnect</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="./assets/fontawesome/css/all.css">
@@ -75,8 +75,8 @@ $page = 'events';
                         
                             ?>
                             <div class="d-flex align-items-center gap-2">
-                                <a href="<?php echo $googleCalendarUrl; ?>" target="_blank" class="btn border-0 btn-success">Add to
-                                    Google Calendar</a>
+                                <a href="<?php echo $googleCalendarUrl; ?>" target="_blank"
+                                    class="btn border-0 btn-success">Add to Google Calendar</a>
                                 <a class="btn" href="?event_id=<?php echo $event_id; ?>&attend=<?php echo $event_id; ?>"><i
                                         class="fa fa-times"></i><span>NOT Attend</span></a>
                             </div>
@@ -119,6 +119,35 @@ $page = 'events';
                         }
                         ?>
                     </div>
+                    <?php
+                    // Check if the user is an admin (assuming isAdmin function checks user role)
+                    if (isAdmin()) {
+                        // Get the event ID from the URL parameter or any other source
+                        $event_id = $_GET['event_id']; // Assuming the event_id is passed in the URL
+                    
+                        // Get the details of all attendees for the event
+                        $attendees = getEventAttendees($event_id);
+
+                        // Check if there are any attendees
+                        if (!empty($attendees)) {
+                            // Display the attendees' details in a Bootstrap 5 dark table
+                            echo '<table class="table table-dark mt-4">';
+                            echo '<thead><tr><th colspan="2" class="py-3 text-center">Attendees</th></tr></thead>';
+                            echo '<thead><tr><th>Name</th><th>Email</th></tr></thead>';
+                            echo '<tbody>';
+                            foreach ($attendees as $attendee) {
+                                echo '<tr>';
+                                echo '<td>' . $attendee['name'] . '</td>';
+                                echo '<td>' . $attendee['email'] . '</td>';
+                                echo '</tr>';
+                            }
+                            echo '</tbody>';
+                            echo '</table>';
+                        } else {
+                            echo 'No attendees found.';
+                        }
+                    }
+                    ?>
                 </main>
             </div>
         </div>

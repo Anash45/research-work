@@ -37,18 +37,21 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addNoteModalLabel">Add Note</h5>
-                <button type="button" class="bg-transparent border-0 p-0 text-white" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                <button type="button" class="bg-transparent border-0 p-0 text-white" data-bs-dismiss="modal"
+                    aria-label="Close"><i class="fa fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <!-- Note form -->
                 <form id="addNoteForm" method="POST" action="">
                     <div class="mb-3">
                         <label for="noteTitle" class="form-label">Title</label>
-                        <input type="text" class="form-control bg-transparent border-secondary" id="title" name="title" required>
+                        <input type="text" class="form-control bg-transparent border-secondary" id="title" name="title"
+                            required>
                     </div>
                     <div class="mb-3">
                         <label for="noteContent" class="form-label">Content</label>
-                        <textarea class="form-control bg-transparent border-secondary" id="content" name="content" rows="3" required></textarea>
+                        <textarea class="form-control bg-transparent border-secondary" id="content" name="content"
+                            rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" name="addNote">Save Note</button>
                 </form>
@@ -58,10 +61,10 @@
 </div>
 <?php
 $userTimer = getUserTimer();
-$dateTime = $userTimer['start_time'];
-$durationMins = $userTimer['duration_minutes'];
-$jsDateTime = convertToJsDateTime($dateTime);
 if ($userTimer != null) {
+    $dateTime = $userTimer['start_time'];
+    $durationMins = $userTimer['duration_minutes'];
+    $jsDateTime = convertToJsDateTime($dateTime);
     echo '<script>startCountdown("' . $jsDateTime . '",' . $durationMins . ');</script>';
 }
 ?>
