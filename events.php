@@ -16,7 +16,7 @@ if (isset($_POST['add_event']) && isAdmin()) {
     if ($checkEvent['success']) {
         header('location: ./events.php?added');
     } else {
-        $info = '<div class="alert mb-0 py-2 px-3 alert-success">' . $checkEvent['message'] . '</div>';
+        $info = '<div class="alert mb-0 py-2 px-3 alert-'. $class = ($checkEvent['success']) ? 'success' : 'danger'.'">' . $checkEvent['message'] . '</div>';
     }
 } elseif (isset($_GET['delete_event']) && isAdmin()) { // Check if update_event form is submitted
     // Retrieve form data

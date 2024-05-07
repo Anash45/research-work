@@ -398,6 +398,18 @@ function getEventById($event_id)
 function addEvent($title, $description, $date, $time)
 {
     global $conn;
+
+    // Get the current date and time
+    $currentDateTime = date('Y-m-d H:i:s');
+
+    // Combine date and time to create a datetime string for comparison
+    $eventDateTime = $date . ' ' . $time;
+
+    // Check if the event date time is in the future
+    if ($eventDateTime <= $currentDateTime) {
+        return array('success' => false, 'message' => 'Event date and time should be in the future.');
+    }
+
     // Check if the event already exists
     $check_query = "SELECT * FROM events WHERE event_title = ? AND event_description = ? AND event_date = ? AND event_time = ?";
     $stmt = $conn->prepare($check_query);
@@ -422,6 +434,7 @@ function addEvent($title, $description, $date, $time)
         }
     }
 }
+
 
 function toggleEventAttendance($event_id)
 {
